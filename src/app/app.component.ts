@@ -1,7 +1,7 @@
 
 import { Component, OnInit } from '@angular/core';
 
-import { HttpClient } from "@angular/common/http";
+import { HttpClient, HttpParams, HttpHeaders } from "@angular/common/http";
 import * as _ from 'lodash';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -30,9 +30,39 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.courses$ = this.http
+    /* this.courses$ = this.http
       .get<Course[]>("https://angular-http-guide.firebaseio.com/courses.json").pipe(
-        map((data => _.values(data))));
-        }
-}
+          map((data => _.values(data)))); */
+      /* const params = new HttpParams()
+          .set('orderBy', '"$key"')
+          .set('limitToFirst', "1");
+      this.courses$ = this.http
+          .get("https://angular-http-guide.firebaseio.com/courses.json", { params }).pipe(
+              map((data => _.values(data)))); */
+      const headers = new HttpHeaders()
+          .set("Content-Type", "application/json");
+      this.http.put("https://angular-http-guide.firebaseio.com/courses/-KgVwECOnlc-LHb_B0cQ.json/",
+          {
+              "courseListIcon": ".../main-page-logo-small-hat.png",
+              "description": "Angular Tutorial For Beginners TEST",
+              "iconUrl": ".../angular2-for-beginners.jpg",
+              "longDescription": "...",
+              "url": "new-value-for-url"
+          },
+          { headers })
+            .subscribe(
+                val => {
+                    console.log("PUT call successful value returned in body",
+                        val);
+                },
+                response => {
+                    console.log("PUT call in error", response);
+                },
+                () => {
+                    console.log("The PUT observable is now completed.");
+                }
+            );
+    }
+
+  }
 
